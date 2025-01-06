@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipeline Defects Detection</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            background: linear-gradient(to right, #00aaff, #0066ff);
+            padding: 20px;
+            text-align: center;
+            color: #fff;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        nav {
+            background: #111;
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 10px 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        nav a:hover {
+            background: #00aaff;
+            color: #000;
+            border-radius: 5px;
+        }
+
+        main {
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1, h2 {
+            color: #00aaff;
+            text-shadow: 2px 2px 4px #000;
+        }
+
+        p {
+            font-size: 1.2em;
+            line-height: 1.5;
+            margin: 20px 0;
+        }
+
+        footer {
+            background: #111;
+            text-align: center;
+            padding: 10px;
+            font-size: 0.9em;
+            color: #888;
+        }
+
+        footer a {
+            color: #00aaff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .button-container {
+            margin: 20px 0;
+        }
+
+        .btn {
+            background: #00aaff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #0066ff;
+        }
+
+        .content {
+            display: none;
+            text-align: left;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+    </style>
+    <script>
+        function showContent(sectionId) {
+            const sections = document.querySelectorAll('.content');
+            sections.forEach(section => section.style.display = 'none');
+            document.getElementById(sectionId).style.display = 'block';
+        }
+    </script>
+</head>
+<body>
+    <header>
+        Pipeline Defects Detection System
+    </header>
+    <nav>
+        <a href="#">Home</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+    </nav>
+    <main>
+        <h1>Welcome to the Pipeline Defects Detection System</h1>
+        <div class="button-container">
+            <button class="btn" onclick="showContent('problem-statement')">Problem Statement</button>
+            <button class="btn" onclick="showContent('algorithm')">Algorithm</button>
+            <button class="btn" onclick="showContent('code')">Code</button>
+        </div>
+
+        <div id="problem-statement" class="content">
+            <h2>Problem Statement</h2>
+            <p>
+                The Pipeline Defects Detection System aims to identify and categorize issues in water management systems. 
+                With pipelines playing a critical role in transporting water, any defects such as leaks, blockages, or 
+                pressure drops can lead to inefficiencies and water wastage. The primary challenge lies in detecting 
+                these defects accurately and efficiently using string-matching techniques to parse through extensive log data.
+            </p>
+            <p>
+                The system uses predefined patterns to search for error messages related to pipeline defects, including 
+                "leakage detected," "pipeline damage," "pressure drop," and more. By automating this process, we can 
+                improve the response time for addressing critical issues and ensure the reliability of water supply systems.
+            </p>
+        </div>
+
+        <div id="algorithm" class="content">
+            <h2>Algorithm Description</h2>
+            <p>
+                The system uses a <strong>brute force string matching algorithm</strong> to identify error patterns in logs. 
+                This algorithm works by:
+            </p>
+            <ul>
+                <li>Converting the log entries and error patterns to lowercase for case-insensitive comparison.</li>
+                <li>Sliding the pattern over the log entry one character at a time to check for matches.</li>
+                <li>Recording any match found and avoiding duplicate detections using a set.</li>
+            </ul>
+            <p>
+                This approach is simple and effective for small-scale systems. Although it may not be the most efficient 
+                for large datasets, its straightforward implementation and accuracy make it suitable for the given use case.
+            </p>
+        </div>
+
+        <div id="code" class="content">
+            <h2>Code Implementation</h2>
+            <pre>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <map>
+#include <unordered_set>
+#include <algorithm>
+
+// Function to load logs
+std::vector<std::string> loadLogs(const std::string &filename);
+// ... (rest of the code is the same as provided earlier)
+            </pre>
+        </div>
+    </main>
+    <footer>
+        &copy; 2025 Pipeline Defects Detection System | <a href="#">Privacy Policy</a>
+    </footer>
+</body>
+</html>
