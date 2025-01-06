@@ -161,18 +161,146 @@
 
         <div id="code" class="content">
             <h2>Code Implementation</h2>
-            <pre>
-#include <iostream>
-#include <fstream>
+            <pre><code>
+                #include <iostream>
 #include <string>
 #include <vector>
-#include <map>
-#include <unordered_set>
 #include <algorithm>
+#include <cctype>
+#include <unordered_map>
 
-// Function to load logs
-std::vector<std::string> loadLogs(const std::string &filename);
-// ... (rest of the code is the same as provided earlier)
+// Function to perform a case-insensitive comparison of two characters
+bool caseInsensitiveCompare(char a, char b) {
+    return tolower(a) == tolower(b);
+}
+
+// Preprocessing phase: Generate the bad character shift table
+void buildBadCharTable(const std::string& pattern, std::unordered_map<char, int>& badCharTable) {
+    int m = pattern.size();
+
+    for (int i = 0; i < m - 1; i++) {
+        badCharTable[tolower(pattern[i])] = m - i - 1;
+    }
+}
+
+// Boyer-Moore string matching algorithm (case-insensitive)
+void detectPipelineError(const std::string& report, const std::string& keyword) {
+    int m = keyword.size();
+    int n = report.size();
+
+    if (m == 0) {
+        std::cout << "Keyword cannot be empty!" << std::endl;
+        return;
+    }
+
+    // Build the bad character table
+    std::unordered_map<char, int> badCharTable;
+    buildBadCharTable(keyword, badCharTable);
+
+    int i = 0;  // Start scanning the report from the first character
+    while (i <= n - m) {
+        int j = m - 1;
+
+        // Compare the pattern from right to left
+        while (j >= 0 && caseInsensitiveCompare(report[i + j], keyword[j])) {
+            j--;
+        }
+
+        // If the pattern is found, print the index
+        if (j < 0) {
+            std::cout << "Error found at index " << i << std::endl;
+            i += (i + m < n) ? m - badCharTable[tolower(report[i + m])] : 1;
+        } else {
+            // Shift the pattern based on the bad character rule
+            i += std::max(1, badCharTable[tolower(report[i + j])] - (m - 1 - j));
+        }
+    }
+
+    std::cout << "No errors found in the report." << std::endl;
+}
+
+// Class to represent a pipeline report
+class PipelineReport {
+public:
+    PipelineReport(std::string reportName, std::string reportContent)
+        : name(reportName), content(reportContent) {}
+
+    const std::string& getName() const { return name; }
+    const std::string& getContent() const { return content; }
+
+    // Method to display the report content
+    void displayReport() const {
+        std::cout << "Report: " << name << std::endl;
+        std::cout << "Content: " << content << std::endl;
+    }
+
+private:
+    std::string name;
+    std::string content;
+};
+
+// Function to manage multiple reports and search for errors in them
+void manageReportsAndSearch(std::vector<PipelineReport>& reports, const std::string& keyword) {
+    for (auto& report : reports) {
+        std::cout << "Checking report: " << report.getName() << std::endl;
+        detectPipelineError(report.getContent(), keyword);
+    }
+}
+
+// Function to add a new report to the collection
+void addNewReport(std::vector<PipelineReport>& reports) {
+    std::string name, content;
+    std::cout << "Enter report name: ";
+    std::getline(std::cin, name);
+    std::cout << "Enter report content: ";
+    std::getline(std::cin, content);
+
+    PipelineReport newReport(name, content);
+    reports.push_back(newReport);
+}
+
+// Function to display the menu
+void displayMenu() {
+    std::cout << "\nPipeline Report Management System" << std::endl;
+    std::cout << "1. Add a new report" << std::endl;
+    std::cout << "2. Search for errors in reports" << std::endl;
+    std::cout << "3. Exit" << std::endl;
+}
+
+int main() {
+    std::vector<PipelineReport> reports;
+    std::string keyword;
+    int choice;
+
+    std::cout << "Enter the keyword to search for: ";
+    std::getline(std::cin, keyword);
+
+    // Main menu loop for managing reports
+    while (true) {
+        displayMenu();
+        std::cout << "Enter your choice: ";
+        std::cin >> choice;
+        std::cin.ignore();  // To ignore the newline character left in the input buffer
+
+        switch (choice) {
+            case 1:
+                addNewReport(reports);  // Add a new report
+                break;
+            case 2:
+                manageReportsAndSearch(reports, keyword);  // Search for errors in reports
+                break;
+            case 3:
+                std::cout << "Exiting program..." << std::endl;
+                return 0;
+            default:
+                std::cout << "Invalid choice. Please try again." << std::endl;
+        }
+    }
+
+    return 0;
+}
+
+            </code>
             </pre>
         </div>
     </main>
